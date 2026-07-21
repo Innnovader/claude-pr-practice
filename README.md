@@ -11,3 +11,9 @@ Un script simple en Python que saluda por consola.
 ```bash
 python hello.py
 ```
+
+## Tests
+
+```bash
+pytest
+```
