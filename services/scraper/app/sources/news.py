@@ -87,7 +87,7 @@ async def scrape_news_source(source_name: str, rss_url: str) -> list[ScrapedNews
                 body=None,
                 source_name=source_name,
                 source_url=entry.link,
-                topic=classify_topic(entry.title, entry.summary),  # reglas, no IA — ver topic_classifier.py
+                topic=classify_topic(entry.title, entry.summary, source_name),  # reglas, no IA — ver topic_classifier.py
                 sentiment=None,      # pendiente: clasificación IA
                 entities=[],         # pendiente: NER vía Claude
                 dnl_relevance=None,  # pendiente: clasificación IA

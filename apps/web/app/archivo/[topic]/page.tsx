@@ -6,6 +6,56 @@ import { formatRelativeTime } from "@/lib/utils";
 import { ArrowLeft, ExternalLink, FolderOpen } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { CoyunturaNews } from "@/lib/types";
+
+// A partir de este tamaño, la carpeta se subdivide por tiempo en vez de
+// mostrar todo en una sola lista larga.
+const GROUP_THRESHOLD = 20;
+
+const TIME_BUCKETS = ["Hoy", "Esta semana", "Este mes", "Anteriores"] as const;
+
+function bucketFor(publishedAt: string): (typeof TIME_BUCKETS)[number] {
+  const days = (Date.now() - new Date(publishedAt).getTime()) / 86_400_000;
+  if (days < 1) return "Hoy";
+  if (days < 7) return "Esta semana";
+  if (days < 31) return "Este mes";
+  return "Anteriores";
+}
+
+function groupByTime(news: CoyunturaNews[]): Map<string, CoyunturaNews[]> {
+  const groups = new Map<string, CoyunturaNews[]>();
+  for (const item of news) {
+    const bucket = bucketFor(item.published_at);
+    if (!groups.has(bucket)) groups.set(bucket, []);
+    groups.get(bucket)!.push(item);
+  }
+  return groups;
+}
+
+function NewsGrid({ news }: { news: CoyunturaNews[] }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+      {news.map((item) => (
+        <a key={item.id} href={item.source_url} target="_blank" rel="noopener noreferrer">
+          <Card className="p-3 h-full hover:border-[var(--color-dnl-red)] transition-colors">
+            <div className="flex items-start justify-between gap-2">
+              <p className="text-sm font-medium leading-snug">{item.headline}</p>
+              <ExternalLink size={13} className="shrink-0 mt-0.5 text-slate-400" />
+            </div>
+            {item.summary && <p className="mt-1 text-xs text-slate-500 line-clamp-2">{item.summary}</p>}
+            <div className="mt-2 flex items-center gap-1.5">
+              <Badge>
+                <FolderOpen size={10} className="mr-1 inline" />
+                {item.source_name}
+              </Badge>
+              <span className="ml-auto text-[11px] text-slate-400">{formatRelativeTime(item.published_at)}</span>
+            </div>
+          </Card>
+        </a>
+      ))}
+    </div>
+  );
+}
 
 export default async function ArchivoTopicPage({ params }: { params: Promise<{ topic: string }> }) {
   const { topic: encodedTopic } = await params;
@@ -13,10 +63,12 @@ export default async function ArchivoTopicPage({ params }: { params: Promise<{ t
   const news = await getNewsByTopic(topic);
   if (news.length === 0) notFound();
 
+  const grouped = news.length > GROUP_THRESHOLD ? groupByTime(news) : null;
+
   return (
     <div>
       <Header title={topic} subtitle={`${news.length} noticias reales en esta carpeta`} />
-      <div className="p-4 md:p-6 space-y-4">
+      <div className="p-4 md:p-6 space-y-6">
         <Link
           href="/archivo"
           className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-[var(--color-dnl-red)]"
@@ -25,26 +77,18 @@ export default async function ArchivoTopicPage({ params }: { params: Promise<{ t
           Volver al Archivo
         </Link>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-          {news.map((item) => (
-            <a key={item.id} href={item.source_url} target="_blank" rel="noopener noreferrer">
-              <Card className="p-3 h-full hover:border-[var(--color-dnl-red)] transition-colors">
-                <div className="flex items-start justify-between gap-2">
-                  <p className="text-sm font-medium leading-snug">{item.headline}</p>
-                  <ExternalLink size={13} className="shrink-0 mt-0.5 text-slate-400" />
-                </div>
-                {item.summary && <p className="mt-1 text-xs text-slate-500 line-clamp-2">{item.summary}</p>}
-                <div className="mt-2 flex items-center gap-1.5">
-                  <Badge>
-                    <FolderOpen size={10} className="mr-1 inline" />
-                    {item.source_name}
-                  </Badge>
-                  <span className="ml-auto text-[11px] text-slate-400">{formatRelativeTime(item.published_at)}</span>
-                </div>
-              </Card>
-            </a>
-          ))}
-        </div>
+        {grouped ? (
+          TIME_BUCKETS.filter((b) => grouped.has(b)).map((bucket) => (
+            <section key={bucket}>
+              <h2 className="mb-3 text-sm font-semibold text-slate-500 uppercase tracking-wide">
+                {bucket} ({grouped.get(bucket)!.length})
+              </h2>
+              <NewsGrid news={grouped.get(bucket)!} />
+            </section>
+          ))
+        ) : (
+          <NewsGrid news={news} />
+        )}
       </div>
     </div>
   );

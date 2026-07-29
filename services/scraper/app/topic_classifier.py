@@ -34,30 +34,44 @@ TOPIC_KEYWORDS: dict[str, list[str]] = {
         r"\bseguridad\b", r"\borden publico\b", r"\bejercito\b", r"\bpolicia\b",
         r"\bfuerzas militares\b", r"\bdisidencias\b", r"\bclan del golfo\b",
         r"\beln\b", r"\bextorsion", r"\bsecuestro\b", r"\bmasacre\b",
-        r"\bterrorismo\b", r"\battentado\b", r"\bhomicidio",
+        r"\bterrorismo\b", r"\battentado\b", r"\bhomicidio", r"\basesinat",
+        r"\bataca(do|ron)? con arma\b", r"\bcapturad", r"\bpmu\b",
+        # Emergencias/desastres — se agrupan aquí porque en Colombia "orden
+        # público" y respuesta a emergencias suelen manejarse en el mismo
+        # bloque institucional (Ejército/Defensa Civil/Gestión del Riesgo).
+        r"\bderrumbe\b", r"\bdeslizamiento\b", r"\bterremoto\b", r"\bsismo\b",
+        r"\binundacion", r"\bemergencia\b", r"\bbloqueo",
     ],
     "Medio ambiente": [
         r"\bmedio ambiente\b", r"\bminambiente\b", r"\bdeforestacion\b",
         r"\bamazonia\b", r"\bcambio climatico\b", r"\bemisiones\b",
         r"\bbiodiversidad\b", r"\bparamo\b", r"\brecursos naturales\b",
-        r"\bmineria ilegal\b",
+        r"\bmineria ilegal\b", r"\bideam\b",
     ],
     "Justicia": [
         r"\bcorte constitucional\b", r"\bcorte suprema\b", r"\bfiscalia\b",
         r"\bjep\b", r"\bprocuraduria\b", r"\bcontraloria\b", r"\bimputacion\b",
-        r"\bcondena[dr]", r"\bjuez\b", r"\bjuicio\b",
+        r"\bcondena[dr]", r"\bjuez\b", r"\bjuicio\b", r"\bcorrupcion\b",
+        r"\bescandalo\b", r"\binvestigacion (judicial|disciplinaria)\b",
+        r"\baudiencia\b", r"\bcalumnia\b", r"\binjuria\b",
     ],
     "Congreso": [
         r"\bcongreso\b", r"\bsenado\b", r"\bcamara de representantes\b",
         r"\bproyecto de ley\b", r"\bsenador", r"\brepresentante a la camara\b",
         r"\bplenaria\b", r"\bponente\b",
     ],
+    "Internacional": [
+        r"\bembajada", r"\bcancilleria\b", r"\brelaciones (internacionales|exteriores)\b",
+        r"\bmedio oriente\b", r"\bfrontera con\b", r"\bmigracion venezolana\b",
+        r"\bgeopolitica\b", r"\bonu\b", r"\bcumbre internacional\b",
+    ],
     "Economia": [
         r"\beconomi", r"\bdolar\b", r"\binflacion\b", r"\bpib\b", r"\bimpuesto",
         r"\breforma tributaria\b", r"\bdian\b", r"\bminhacienda\b",
         r"\bpresupuesto (general |nacional )?de la nacion\b", r"\bbanco de la republica\b",
         r"\btasa de interes\b", r"\bdesempleo\b", r"\bempleo\b", r"\bexportacion",
-        r"\bimportacion",
+        r"\bimportacion", r"\bempresa\b", r"\bmercado\b", r"\bcotizacion\b",
+        r"\beuro hoy\b", r"\bconcesionario\b",
     ],
     # Catch-all de gobierno/presidencia — al final por ser el más genérico.
     "Gobierno ADLE": [
@@ -72,19 +86,29 @@ _COMPILED = {topic: re.compile("|".join(patterns), re.IGNORECASE) for topic, pat
 
 FALLBACK_TOPIC = "Otros"
 
+# Fuentes que son columnas de opinión — sus títulos suelen ser crípticos
+# ("El circo del tigre", "La derrota del otro") y nunca van a matchear
+# ninguna palabra clave de tema. En vez de que caigan en "Otros" junto con
+# todo lo demás, se agrupan aparte por la fuente misma.
+_OPINION_SOURCES = {"El Espectador - Blogs de Política", "Razón Pública"}
+OPINION_TOPIC = "Opinión"
+
 
 def _normalize(text: str) -> str:
     nfkd = unicodedata.normalize("NFKD", text)
     return "".join(c for c in nfkd if not unicodedata.combining(c)).lower()
 
 
-def classify_topic(headline: str, summary: str | None = None) -> str:
-    """Retorna el nombre de la primera categoría que matchee, o "Otros" si
-    ninguna aplica. NO es clasificación con IA — ver docstring del módulo."""
+def classify_topic(headline: str, summary: str | None = None, source_name: str | None = None) -> str:
+    """Retorna el nombre de la primera categoría que matchee. Si ninguna
+    palabra clave aplica pero la fuente es de opinión, cae en "Opinión";
+    si no, en "Otros". NO es clasificación con IA — ver docstring del módulo."""
     text = _normalize(f"{headline} {summary or ''}")
     for topic, pattern in _COMPILED.items():
         if pattern.search(text):
             return topic
+    if source_name in _OPINION_SOURCES:
+        return OPINION_TOPIC
     return FALLBACK_TOPIC
 
 

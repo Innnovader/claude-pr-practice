@@ -2,7 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Card } from "@/components/ui/Card";
 import { VerifiedDataBanner } from "@/components/ui/VerifiedDataBanner";
 import { getArchivoByTopic, TOPIC_DISPLAY_ORDER } from "@/lib/data/archivo";
-import { Archive, ChevronRight, Landmark, HeartPulse, PiggyBank, Shield, Leaf, Scale, Building2, FolderOpen } from "lucide-react";
+import { Archive, ChevronRight, Landmark, HeartPulse, PiggyBank, Shield, Leaf, Scale, Building2, FolderOpen, Globe2, MessageSquareQuote } from "lucide-react";
 import Link from "next/link";
 
 const TOPIC_ICONS: Record<string, typeof Landmark> = {
@@ -14,6 +14,8 @@ const TOPIC_ICONS: Record<string, typeof Landmark> = {
   "Medio ambiente": Leaf,
   Justicia: Scale,
   Congreso: Building2,
+  Internacional: Globe2,
+  "Opinión": MessageSquareQuote,
   Otros: FolderOpen,
 };
 

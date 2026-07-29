@@ -58,4 +58,6 @@ export const TOPIC_DISPLAY_ORDER = [
   "Medio ambiente",
   "Justicia",
   "Congreso",
+  "Internacional",
+  "Opinión",
 ];
