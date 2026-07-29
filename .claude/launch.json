@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "fred-barber-site",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8080", "--directory", "C:\\Users\\Laura\\Desktop\\fred-barber-authentic"],
+      "port": 8080
+    },
+    {
+      "name": "radar-liberal-dnl",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\npm.cmd",
+      "runtimeArgs": ["--prefix", "apps/web", "run", "dev"],
+      "port": 3000
+    }
+  ]
+}

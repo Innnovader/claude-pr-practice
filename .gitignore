@@ -1,0 +1,30 @@
+# Node / Next.js
+node_modules/
+.next/
+out/
+apps/web/.next/
+apps/web/node_modules/
+*.tsbuildinfo
+next-env.d.ts
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+services/scraper/.venv/
+services/scraper/__pycache__/
+.pytest_cache/
+
+# Env files (nunca commitear credenciales)
+.env
+.env.local
+.env.*.local
+apps/web/.env
+apps/web/.env.local
+services/scraper/.env
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+*.log

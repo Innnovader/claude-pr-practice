@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/* Branding Partido Liberal Colombiano — Rojo institucional, blanco, gris slate */
+@theme {
+  --color-dnl-red: #d32f2f;
+  --color-dnl-red-dark: #a02323;
+  --color-dnl-red-light: #f4a3a3;
+  --color-dnl-slate-950: #0b0f14;
+  --color-dnl-slate-900: #111827;
+  --color-dnl-slate-800: #1f2937;
+  --color-dnl-slate-700: #334155;
+  --color-dnl-slate-500: #64748b;
+  --color-dnl-slate-200: #e2e8f0;
+  --color-dnl-slate-100: #f1f5f9;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-muted: #f1f5f9;
+  --border: #e2e8f0;
+}
+
+:root[data-theme="dark"] {
+  --background: #0b0f14;
+  --foreground: #e2e8f0;
+  --surface: #111827;
+  --surface-muted: #1f2937;
+  --border: #1f2937;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #0b0f14;
+    --foreground: #e2e8f0;
+    --surface: #111827;
+    --surface-muted: #1f2937;
+    --border: #1f2937;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-dnl-red);
+  color: white;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-dnl-slate-500);
+  border-radius: 999px;
+}
