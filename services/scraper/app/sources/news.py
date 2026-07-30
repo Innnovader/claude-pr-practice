@@ -11,6 +11,7 @@ import logging
 from app.dedup import content_hash
 from app.models import ScrapedNews
 from app.relevance_filter import is_relevant
+from app.sources.gdelt import scrape_gdelt_news
 from app.sources.rss_base import fetch_feed
 from app.topic_classifier import classify_topic
 
@@ -124,6 +125,10 @@ async def scrape_all_news() -> list[ScrapedNews]:
     results: list[ScrapedNews] = []
     for source_name, rss_url in NEWS_RSS_SOURCES.items():
         results.extend(await scrape_news_source(source_name, rss_url))
+    # GDELT amplía la cobertura más allá de las fuentes curadas de arriba —
+    # ver app/sources/gdelt.py para el rate limit conocido y por qué no rompe
+    # el ciclo (retorna [] ante cualquier fallo en vez de lanzar).
+    results.extend(await scrape_gdelt_news())
     return results
 
 
