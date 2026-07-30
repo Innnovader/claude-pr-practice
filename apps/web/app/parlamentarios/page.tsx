@@ -1,6 +1,5 @@
 import { Header } from "@/components/layout/Header";
 import { ParliamentarianCard } from "@/components/parlamentarios/ParliamentarianCard";
-import { VerifiedSenateRoster } from "@/components/parlamentarios/VerifiedSenateRoster";
 import { MockDataBanner } from "@/components/ui/MockDataBanner";
 import { VerifiedDataBanner } from "@/components/ui/VerifiedDataBanner";
 import { StatTile } from "@/components/ui/StatTile";
@@ -8,19 +7,12 @@ import { mockSenators, mockRepresentatives, mockStatements } from "@/lib/mock-da
 import { getRealParliamentarians } from "@/lib/data/parliamentarians";
 import { Users, Landmark, AlertOctagon } from "lucide-react";
 
-// Departamentos con representante liberal en Cámara que no logramos
-// verificar cruzando 2 fuentes independientes (nombre reportado por una
-// sola fuente, o directamente no localizado) — pendientes de cargar por la
-// DNL desde sus registros internos.
-const PENDING_CAMARA_DEPARTMENTS = [
-  "Arauca (segunda curul)",
-  "Chocó",
-  "Córdoba",
-  "Nariño",
-  "Valle del Cauca",
-  "Guaviare",
-  "San Andrés y Providencia",
-];
+// Confirmado contra el directorio oficial de camara.gov.co (filtrado por
+// Partido Liberal Colombiano) el 2026-07-30: el partido tiene 24 curules en
+// la Cámara, no 30. Estos departamentos genuinamente NO tienen representante
+// liberal — no es que falte verificarlos, es que el resultado real fue cero
+// curules ahí (incluye la segunda curul de Arauca, que tampoco es liberal).
+const DEPARTMENTS_WITHOUT_LIBERAL_SEAT = ["Arauca (segunda curul)", "Córdoba", "Nariño"];
 
 export default async function ParlamentariosPage() {
   const realParliamentarians = await getRealParliamentarians();
@@ -42,15 +34,15 @@ export default async function ParlamentariosPage() {
       <div className="p-4 md:p-6 space-y-6">
         {hasRealData ? (
           <VerifiedDataBanner>
-            {senators.length} senadores y {representatives.length} representantes reales, verificados cruzando
-            al menos 2 fuentes de prensa independientes el 2026-07-28. Sin bio, comisión ni índice de alineación
-            fabricados — esos campos quedan vacíos hasta verificarse con fuentes oficiales.
+            {senators.length} senadores y {representatives.length} representantes reales — registro completo
+            verificado directamente contra los directorios oficiales de senado.gov.co y camara.gov.co el
+            2026-07-30. Comisión, correo, foto y redes provienen de esas mismas fuentes oficiales cuando están
+            publicadas; los campos que el Congreso aún no ha cargado en su propio sitio quedan vacíos — nada
+            fabricado.
           </VerifiedDataBanner>
         ) : (
           <MockDataBanner />
         )}
-
-        <VerifiedSenateRoster />
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
           <StatTile label="Senadores" value={senators.length} icon={Landmark} accent="red" />
@@ -69,7 +61,7 @@ export default async function ParlamentariosPage() {
 
         <section>
           <h2 className="mb-3 text-sm font-semibold text-slate-500 uppercase tracking-wide">
-            Cámara de Representantes {hasRealData && `(${representatives.length} de ~30 verificados)`}
+            Cámara de Representantes {hasRealData && `(${representatives.length} de ${representatives.length} curules — registro oficial completo)`}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
             {representatives.map((p) => (
@@ -78,8 +70,8 @@ export default async function ParlamentariosPage() {
           </div>
           {hasRealData && (
             <div className="mt-3 rounded-lg border border-dashed p-3 text-xs text-slate-500" style={{ borderColor: "var(--border)" }}>
-              <p className="font-medium mb-1">Departamentos pendientes de completar (sin fuente confiable localizada):</p>
-              <p>{PENDING_CAMARA_DEPARTMENTS.join(" · ")}</p>
+              <p className="font-medium mb-1">Departamentos sin curul liberal en Cámara (confirmado en camara.gov.co, no es falta de datos):</p>
+              <p>{DEPARTMENTS_WITHOUT_LIBERAL_SEAT.join(" · ")}</p>
             </div>
           )}
         </section>

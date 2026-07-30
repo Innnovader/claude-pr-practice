@@ -10,6 +10,12 @@ import { formatDate, formatRelativeTime } from "@/lib/utils";
 import { UserRound, Mail, AtSign, Instagram, ExternalLink } from "lucide-react";
 import { notFound } from "next/navigation";
 
+function handleFromUrl(url: string): string {
+  const last = url.replace(/\/$/, "").split("/").pop() ?? url;
+  const handle = last.split("?")[0];
+  return handle.startsWith("@") ? handle : `@${handle}`;
+}
+
 export function generateStaticParams() {
   return mockParliamentarians.map((p) => ({ id: p.id }));
 }
@@ -65,10 +71,24 @@ export default async function ParliamentarianProfilePage({ params }: { params: P
                   <span className="flex items-center gap-1"><Mail size={13} /> {parliamentarian.contact_email}</span>
                 )}
                 {parliamentarian.social_x_handle && (
-                  <span className="flex items-center gap-1"><AtSign size={13} /> {parliamentarian.social_x_handle}</span>
+                  <a
+                    href={parliamentarian.social_x_handle}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 hover:text-[var(--color-dnl-red)]"
+                  >
+                    <AtSign size={13} /> {handleFromUrl(parliamentarian.social_x_handle)}
+                  </a>
                 )}
                 {parliamentarian.social_instagram_handle && (
-                  <span className="flex items-center gap-1"><Instagram size={13} /> {parliamentarian.social_instagram_handle}</span>
+                  <a
+                    href={parliamentarian.social_instagram_handle}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 hover:text-[var(--color-dnl-red)]"
+                  >
+                    <Instagram size={13} /> {handleFromUrl(parliamentarian.social_instagram_handle)}
+                  </a>
                 )}
               </div>
             </div>
