@@ -30,8 +30,8 @@ export function LiveFeed({
             href={item.source_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="block rounded-lg border p-3 hover:border-[var(--color-dnl-red)] transition-colors"
-            style={{ borderColor: "var(--border)" }}
+            className="card-interactive block rounded-xl border p-3 hover:border-[var(--color-dnl-red)]"
+            style={{ borderColor: "var(--border)", background: "var(--surface)", boxShadow: "var(--shadow-card)" }}
           >
             <div className="flex items-start justify-between gap-2">
               <p className="text-sm font-medium leading-snug">{item.headline}</p>

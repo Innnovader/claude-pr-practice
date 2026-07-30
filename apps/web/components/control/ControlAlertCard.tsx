@@ -13,7 +13,7 @@ export function ControlAlertCard({ alert }: { alert: ControlAlert }) {
       rel="noopener noreferrer"
       className="block"
     >
-      <Card className="p-3 hover:border-[var(--color-dnl-red)] transition-colors">
+      <Card className="card-interactive p-3 hover:border-[var(--color-dnl-red)]">
         <div className="flex items-start gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-500 dark:bg-slate-800 shrink-0">
             <Icon size={15} />
