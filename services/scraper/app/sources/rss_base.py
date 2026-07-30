@@ -24,6 +24,7 @@ class FeedEntry:
     link: str
     summary: str
     published_at: datetime
+    category: str = ""  # tags/categorías tal como los publica el feed (ver relevance_filter.py)
 
 
 # Algunos sitios (p.ej. institutopensamientoliberal.com) devuelven 406 a
@@ -60,12 +61,14 @@ async def fetch_feed(url: str, timeout: float = 15.0) -> list[FeedEntry]:
     entries: list[FeedEntry] = []
     for entry in parsed.entries:
         published = _parse_published(entry)
+        tags = ", ".join(t.get("term", "") for t in entry.get("tags", []) if t.get("term"))
         entries.append(
             FeedEntry(
                 title=entry.get("title", "").strip(),
                 link=entry.get("link", "").strip(),
                 summary=entry.get("summary", "").strip(),
                 published_at=published,
+                category=tags,
             )
         )
     return entries

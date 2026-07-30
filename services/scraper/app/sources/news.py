@@ -77,7 +77,7 @@ async def scrape_news_source(source_name: str, rss_url: str) -> list[ScrapedNews
     for entry in entries:
         if not entry.title or not entry.link:
             continue
-        if not is_relevant(entry.title, entry.summary, entry.link):
+        if not is_relevant(entry.title, entry.summary, entry.link, entry.category):
             skipped += 1
             continue
         items.append(
