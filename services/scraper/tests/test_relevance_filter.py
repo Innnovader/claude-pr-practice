@@ -56,6 +56,25 @@ def test_blocks_generic_entertainment_without_named_celebrity():
     )
 
 
+def test_blocks_hyperlocal_traffic_incident_reported_by_user():
+    # Caso real reportado por la usuaria el 2026-07-30 (captura de pantalla):
+    # sucesos de tránsito individual sin ángulo institucional, sourced solo
+    # en un post de redes sociales del propio afectado. Infobae no marca
+    # categoría en su RSS, así que no matcheaba ningún patrón previo.
+    assert (
+        is_relevant(
+            "Conductor del Chevrolet Spark azul denunció abuso de autoridad "
+            "durante la inmovilización del vehículo en Cajicá: lo publicó en "
+            "sus redes sociales",
+            "La intervención se ejecutó el jueves 30 de julio de 2026 en "
+            "Cundinamarca, luego de reportes por conducción riesgosa.",
+            "https://www.infobae.com/colombia/2026/07/30/conductor-del-chevrolet-spark-azul",
+            None,
+        )
+        is False
+    )
+
+
 def test_allows_real_political_news():
     assert (
         is_relevant(

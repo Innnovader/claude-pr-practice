@@ -90,6 +90,18 @@ _IRRELEVANT_PATTERNS = [
     # Salud/lifestyle genérico sin relación política (tips caseros)
     r"\breceta[s]? de cocina\b", r"\bcomo preparar\b",
     r"\bplantas? (que puede tener en casa|para ahuyentar)\b",
+    # Sucesos hiperlocales de tránsito/vecinales sin ángulo institucional.
+    # Infobae (sin <category> en su RSS, ver docstring del módulo) identifica
+    # a la persona por su vehículo en vez de su nombre — señal de que es nota
+    # de "sucesos" individual, no política — y la fuente es un post de redes
+    # sociales del propio afectado, no una institución.
+    # Incidente real 2026-07-30: "Conductor del Chevrolet Spark azul denunció
+    # abuso de autoridad durante la inmovilización del vehículo en Cajicá: lo
+    # publicó en sus redes sociales" — no matcheaba ningún tema ni patrón
+    # existente y cayó en "Otros".
+    r"\b(conductor|conductora) del\b.*\b(azul|rojo|roja|blanco|blanca|negro|negra|"
+    r"gris|amarillo|amarilla|verde)\b",
+    r"\binmovilizacion del vehiculo\b", r"\bretencion del vehiculo\b",
 ]
 _IRRELEVANT_RE = re.compile("|".join(_IRRELEVANT_PATTERNS), re.IGNORECASE)
 
