@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { MobileNavProvider } from "@/components/layout/MobileNavContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,10 +23,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
-        <div className="flex h-screen overflow-hidden">
-          <Sidebar />
-          <div className="flex-1 overflow-y-auto">{children}</div>
-        </div>
+        <MobileNavProvider>
+          <div className="flex h-screen overflow-hidden">
+            <Sidebar />
+            <div className="flex-1 overflow-y-auto">{children}</div>
+          </div>
+        </MobileNavProvider>
       </body>
     </html>
   );

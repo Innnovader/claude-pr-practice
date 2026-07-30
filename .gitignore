@@ -28,3 +28,5 @@ services/scraper/.env
 Thumbs.db
 .vscode/
 *.log
+.vercel
+.env*

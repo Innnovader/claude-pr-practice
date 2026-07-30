@@ -1,5 +1,6 @@
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { UserMenu } from "@/components/layout/UserMenu";
+import { MobileMenuButton } from "@/components/layout/MobileMenuButton";
 import { getCurrentProfile } from "@/lib/supabase/get-current-profile";
 import { Circle } from "lucide-react";
 
@@ -8,12 +9,15 @@ export async function Header({ title, subtitle }: { title: string; subtitle?: st
 
   return (
     <header
-      className="flex items-center justify-between border-b px-4 py-3 md:px-6"
+      className="flex items-center justify-between gap-2 border-b px-3 py-3 md:px-6"
       style={{ borderColor: "var(--border)", background: "var(--surface)" }}
     >
-      <div>
-        <h1 className="text-lg font-semibold">{title}</h1>
-        {subtitle && <p className="text-xs text-slate-500">{subtitle}</p>}
+      <div className="flex items-center gap-2 min-w-0">
+        <MobileMenuButton />
+        <div className="min-w-0">
+          <h1 className="text-lg font-semibold truncate">{title}</h1>
+          {subtitle && <p className="text-xs text-slate-500 truncate">{subtitle}</p>}
+        </div>
       </div>
       <div className="flex items-center gap-3">
         <span className="hidden sm:flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
