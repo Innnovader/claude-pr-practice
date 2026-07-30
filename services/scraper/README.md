@@ -12,8 +12,17 @@ pensamiento y actividad en X (Twitter) de figuras clave.
 reales de ese mismo día. `scrape_all_think_tanks()` también se corrió en
 vivo: Fedesarrollo y Dejusticia vía RSS, e IPL y ANIF vía scraping HTML real
 con BeautifulSoup (no tienen RSS) — 24 publicaciones reales obtenidas en la
-última corrida, todo sin necesidad de ninguna credencial. Entes de control,
-Banco de la República y X/Twitter siguen como `STUB` a la espera de:
+última corrida, todo sin necesidad de ninguna credencial. Banco de la
+República (dentro de centros de pensamiento) también quedó resuelto con
+BeautifulSoup — ver docstring de `_scrape_banrep`.
+
+**Entes de control: 2 de 4 fuentes reales desde el 2026-07-30.** Fiscalía y
+Defensoría corren en HTML server-rendered con listados fechados en vivo —
+scraping real con BeautifulSoup (`_scrape_fiscalia`, `_scrape_defensoria`),
+con tests contra fixtures fijos en `tests/test_control_entities.py`.
+Procuraduría y Contraloría siguen como `STUB`: sus secciones de sala de
+prensa renderizan el listado 100% por JS (SharePoint moderno / SPA), no basta
+httpx+BeautifulSoup. X/Twitter sigue como `STUB` a la espera de:
 
 - Credenciales reales (`SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`,
   `X_BEARER_TOKEN` o `TAVILY_API_KEY`).
@@ -43,8 +52,11 @@ Lo que sí funciona hoy sin credenciales:
 | La República - Economía | `larepublica.co/rss/economia` | RSS ✓ (verificado 2026-07-30) — usar la ruta scoped a economía, no `/rss` (el feed general mete también sección "Ocio") |
 | Fedesarrollo | `repository.fedesarrollo.org.co/feed/rss_1.0/site` | RSS 1.0 del repositorio institucional, no `/feed` |
 | Dejusticia | `dejusticia.org/feed/` | RSS ✓ |
-| Procuraduría | `apps.procuraduria.gov.co/portal/COMUNICADO-A-LA-PRENSA.news` | HTML — no `procuraduria.gov.co/Pages/comunicados.aspx` (404) |
-| Contraloría, Fiscalía, Defensoría, ANIF, Banrep | ver `control_entities.py` / `think_tanks.py` | HTML, sin cambios |
+| Fiscalía | `fiscalia.gov.co/colombia/noticias/` | HTML ✓ scraping real (verificado 2026-07-30) — WordPress, `article.noticia-card` |
+| Defensoría | `defensoria.gov.co/web/guest/noticias` | HTML ✓ scraping real (verificado 2026-07-30) — Liferay, `h3 > a` + `p > a` de fecha |
+| Procuraduría | `procuraduria.gov.co/Lists/Sala de Prensa/AllItems.aspx` | STUB — SharePoint moderno, listado 100% JS. La URL vieja (`apps.procuraduria.gov.co/portal/COMUNICADO-A-LA-PRENSA.news`) sigue con HTTP 200 pero quedó congelada en oct-2022, es un CMS abandonado |
+| Contraloría | `contraloria.gov.co/contraloria/sala-de-prensa` | STUB — listado no viene en el HTML inicial (SPA) |
+| ANIF, Banrep | ver `think_tanks.py` | HTML ✓ scraping real |
 | IPL | `institutopensamientoliberal.com` | dominio correcto — NO `pensamientoliberal.org` (no resuelve). Requiere header `Accept` de navegador o responde 406 |
 
 ## Setup
@@ -85,8 +97,10 @@ pytest -q
    en vivo — solo revalidar periódicamente que las URLs sigan vigentes.
    Falta activar El Espectador/Semana (sin RSS estable, ver tabla arriba) y
    conectar `upsert_news()` a un Supabase real.
-2. **Entes de control** (`app/sources/control_entities.py`): implementar
-   extracción con Playwright por sitio (no tienen RSS estable).
+2. **Entes de control** (`app/sources/control_entities.py`): ✅ Fiscalía y
+   Defensoría funcionando (HTML real, sin JS). Falta Procuraduría y
+   Contraloría — ambas requieren Playwright porque sus sitios renderizan el
+   listado por JS (SharePoint/SPA respectivamente).
 3. **Centros de pensamiento** (`app/sources/think_tanks.py`): ✅ Fedesarrollo
    y Dejusticia (RSS) e IPL y ANIF (scraping HTML real) funcionando. Falta
    solo Banco de la República — su listado de publicaciones no trae los
