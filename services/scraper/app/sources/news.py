@@ -29,18 +29,29 @@ NEWS_RSS_SOURCES: dict[str, str] = {
     "KienyKe": "https://www.kienyke.com/feed",
     "Las2Orillas": "https://www.las2orillas.co/feed/",
     "Razón Pública": "https://razonpublica.com/feed/",
+    # Re-verificadas el 2026-07-30 a pedido explícito de la usuaria — El
+    # Espectador y Semana SÍ tienen feed hoy (antes daban 404 con los
+    # patrones probados el 2026-07-28; ver BROKEN_NEWS_SOURCES abajo para el
+    # detalle histórico). El Espectador usa la ruta Arc "discover", no "rss"
+    # (por eso no se encontró antes) — se confirmó vía el
+    # <link rel="alternate" type="application/rss+xml"> de su propia página.
+    "El Espectador - Política": "https://www.elespectador.com/arc/outboundfeeds/discover/category/politica/?outputType=xml",
+    "Semana - Política": "https://www.semana.com/arc/outboundfeeds/rss/category/politica/?outputType=xml",
+    # Blu Radio no tiene RSS de texto en su sitio, pero su reproductor de
+    # audio SÍ usa un feed RSS estándar de Omny.fm por show (encontrado vía
+    # el <link rel="alternate"> de la página de su show "Noticias del Día")
+    # — feedparser lo procesa igual que cualquier otro feed, un episodio =
+    # una noticia real (no el resumen de todo el día en un solo item).
+    "Blu Radio - Noticias del Día": "https://www.omnycontent.com/d/playlist/1fc614ef-7db7-429f-a252-a989012fd0c6/0feeb069-0137-4fda-805b-ab43016be51c/bd7c2878-7556-4ca1-9153-ab43016d2cc6/podcast.rss",
+    # YouTube expone un feed RSS/Atom estándar y gratuito por canal (sin API
+    # key, sin cuota) en /feeds/videos.xml?channel_id=... — feedparser lo lee
+    # igual que cualquier feed de noticias; el título del video es el
+    # headline y la descripción cae en `summary`. Canal verificado como el
+    # oficial de Noticias Caracol (feed.title == "Noticias Caracol").
+    "Noticias Caracol (YouTube)": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2Xq2PK-got3Rtz9ZJ32hLQ",
 }
 
 # Fuentes evaluadas y descartadas — no usar sin volver a verificar primero:
-#   - El Espectador (sitio principal, no el subdominio de blogs): sin RSS
-#     público estable encontrado (probado: /arc/outboundfeeds/rss/category/
-#     politica/, /rss/politica/, /feed/ — todos 404). El subdominio de blogs
-#     sí tiene feed (arriba), pero es contenido de opinión, no la sección de
-#     noticias principal.
-#   - Semana - Política: sin RSS público estable encontrado (su página de
-#     "servicio RSS" es de 2005 y ya no lista feeds vigentes).
-#   - Blu Radio: no publica RSS de texto en su sitio — solo tiene feeds de
-#     podcast (audio) en Omny.fm, no útiles para este pipeline de texto.
 #   - Google News RSS (news.google.com/rss/search?q=site:...) funciona
 #     técnicamente para CUALQUIER medio, pero su licencia dice explícitamente
 #     "personal, non-commercial use... any other use expressly prohibited" —
@@ -55,7 +66,7 @@ NEWS_RSS_SOURCES: dict[str, str] = {
 #     Ninguno tiene RSS público localizable con esfuerzo razonable; requieren
 #     scraping HTML dirigido si se quieren activar.
 #     (probado: /rss.xml, /rss/politica.xml, /feed/)
-BROKEN_NEWS_SOURCES: list[str] = ["El Espectador - Política", "Semana - Política"]
+BROKEN_NEWS_SOURCES: list[str] = []
 
 
 async def scrape_news_source(source_name: str, rss_url: str) -> list[ScrapedNews]:

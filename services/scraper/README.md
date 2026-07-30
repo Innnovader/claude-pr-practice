@@ -28,19 +28,22 @@ Lo que sí funciona hoy sin credenciales:
 - El esquema de modelos (`app/models.py`) que espeja `supabase/migrations/0001_init_schema.sql`.
 - El scheduler y los endpoints de health/trigger manual.
 
-### URLs verificadas (HTTP 200) el 2026-07-23
+### URLs verificadas (HTTP 200) el 2026-07-23 (re-verificado y ampliado 2026-07-30)
 
 | Fuente | URL | Notas |
 |---|---|---|
 | El Tiempo - Política | `eltiempo.com/rss/politica.xml` | RSS ✓ |
 | La FM - Actualidad | `lafm.com.co/rss/actualidad.xml` | RSS ✓ (no `/rss.xml`, que da 404) |
 | La Silla Vacía | `lasillavacia.com/feed/` | RSS ✓ |
+| El Espectador - Política | `elespectador.com/arc/outboundfeeds/discover/category/politica/` | RSS ✓ (verificado 2026-07-30) — ruta Arc "discover", no "rss" (por eso no se encontró antes) |
+| Semana - Política | `semana.com/arc/outboundfeeds/rss/category/politica/` | RSS ✓ (verificado 2026-07-30) — no existía o daba 404 el 2026-07-28 |
+| Blu Radio - Noticias del Día | feed Omny.fm del show (ver `app/sources/news.py`) | RSS ✓ (verificado 2026-07-30) — su sitio no tiene RSS de texto, pero el reproductor de audio sí usa RSS estándar por episodio |
+| Noticias Caracol (YouTube) | `youtube.com/feeds/videos.xml?channel_id=UC2Xq2PK-got3Rtz9ZJ32hLQ` | RSS ✓ (verificado 2026-07-30) — feed oficial de YouTube por canal, sin API key. Mismo patrón sirve para cualquier otro canal (RCN, W Radio, etc.) si se necesita más adelante |
 | Fedesarrollo | `repository.fedesarrollo.org.co/feed/rss_1.0/site` | RSS 1.0 del repositorio institucional, no `/feed` |
 | Dejusticia | `dejusticia.org/feed/` | RSS ✓ |
 | Procuraduría | `apps.procuraduria.gov.co/portal/COMUNICADO-A-LA-PRENSA.news` | HTML — no `procuraduria.gov.co/Pages/comunicados.aspx` (404) |
 | Contraloría, Fiscalía, Defensoría, ANIF, Banrep | ver `control_entities.py` / `think_tanks.py` | HTML, sin cambios |
 | IPL | `institutopensamientoliberal.com` | dominio correcto — NO `pensamientoliberal.org` (no resuelve). Requiere header `Accept` de navegador o responde 406 |
-| El Espectador, Semana | — | sin RSS público estable encontrado; requieren scraping HTML o localizar feed vigente |
 
 ## Setup
 
