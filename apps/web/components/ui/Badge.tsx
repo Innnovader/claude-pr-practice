@@ -19,7 +19,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   alto: "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300",
   medio: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
   bajo: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  dnl: "bg-[var(--color-dnl-red)] text-white",
+  dnl: "text-white [background-image:var(--gradient-accent)]",
 };
 
 export function Badge({

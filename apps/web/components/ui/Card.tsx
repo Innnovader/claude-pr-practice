@@ -1,14 +1,14 @@
 import { cn } from "@/lib/utils";
 import type { HTMLAttributes } from "react";
 
-export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
+export function Card({ className, style, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "rounded-xl border bg-[var(--surface)] shadow-sm",
+        "rounded-2xl border bg-[var(--surface)] transition-shadow duration-200",
         className
       )}
-      style={{ borderColor: "var(--border)" }}
+      style={{ borderColor: "var(--border)", boxShadow: "var(--shadow-card)", ...style }}
       {...props}
     />
   );

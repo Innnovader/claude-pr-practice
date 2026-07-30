@@ -7,7 +7,7 @@ import { UserRound } from "lucide-react";
 export function ParliamentarianCard({ p }: { p: Parliamentarian }) {
   return (
     <Link href={`/parlamentarios/${p.id}`}>
-      <Card className="p-4 h-full hover:border-[var(--color-dnl-red)] transition-colors">
+      <Card className="card-interactive p-4 h-full hover:border-[var(--color-dnl-red)]">
         <div className="flex items-start gap-3">
           {p.photo_url ? (
             // eslint-disable-next-line @next/next/no-img-element -- URL de foto viene de datos, dominio no conocido de antemano

@@ -32,7 +32,10 @@ const NAV_ITEMS = [
 function BrandHeader() {
   return (
     <div className="flex items-center gap-2 px-4 py-4 border-b" style={{ borderColor: "var(--border)" }}>
-      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[var(--color-dnl-red)] text-white font-bold text-sm">
+      <div
+        className="flex h-8 w-8 items-center justify-center rounded-lg text-white font-bold text-sm shadow-[0_4px_12px_-2px_rgba(211,47,47,0.5)]"
+        style={{ backgroundImage: "var(--gradient-accent)" }}
+      >
         DNL
       </div>
       <div className="leading-tight">
@@ -55,11 +58,12 @@ function NavLinks({ pathname, mounted, onNavigate }: { pathname: string; mounted
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              "flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition-all",
               active
-                ? "bg-[var(--color-dnl-red)] text-white"
+                ? "text-white shadow-[0_4px_14px_-4px_rgba(211,47,47,0.5)]"
                 : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
             )}
+            style={active ? { backgroundImage: "var(--gradient-accent)" } : undefined}
           >
             <Icon size={16} />
             {item.label}

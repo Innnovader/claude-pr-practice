@@ -1,10 +1,14 @@
 @import "tailwindcss";
 
-/* Branding Partido Liberal Colombiano — Rojo institucional, blanco, gris slate */
+/* Branding Partido Liberal Colombiano — Rojo institucional, blanco, gris slate.
+   v2: acento en degradado (rojo -> naranja calido) para CTAs/estados activos,
+   radios mas grandes y sombras mas suaves — pedido explicito de la usuaria de
+   "algo mas moderno". Reversible: ver commit que introduce este cambio. */
 @theme {
   --color-dnl-red: #d32f2f;
   --color-dnl-red-dark: #a02323;
   --color-dnl-red-light: #f4a3a3;
+  --color-dnl-accent-warm: #f2542d;
   --color-dnl-slate-950: #0b0f14;
   --color-dnl-slate-900: #111827;
   --color-dnl-slate-800: #1f2937;
@@ -17,28 +21,37 @@
 }
 
 :root {
-  --background: #f8fafc;
+  --background: #f4f5f8;
   --foreground: #0f172a;
   --surface: #ffffff;
   --surface-muted: #f1f5f9;
-  --border: #e2e8f0;
+  --border: #e5e7eb;
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.10);
+  --shadow-card-hover: 0 2px 4px rgba(15, 23, 42, 0.06), 0 16px 32px -12px rgba(15, 23, 42, 0.16);
+  --gradient-accent: linear-gradient(135deg, var(--color-dnl-red) 0%, var(--color-dnl-accent-warm) 100%);
 }
 
 :root[data-theme="dark"] {
-  --background: #0b0f14;
-  --foreground: #e2e8f0;
-  --surface: #111827;
-  --surface-muted: #1f2937;
-  --border: #1f2937;
+  --background: #0a0d12;
+  --foreground: #e7eaf0;
+  --surface: #12161f;
+  --surface-muted: #1a202c;
+  --border: #232a37;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 2px 8px rgba(0, 0, 0, 0.4), 0 20px 40px -16px rgba(211, 47, 47, 0.18);
+  --gradient-accent: linear-gradient(135deg, var(--color-dnl-red) 0%, var(--color-dnl-accent-warm) 100%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --background: #0b0f14;
-    --foreground: #e2e8f0;
-    --surface: #111827;
-    --surface-muted: #1f2937;
-    --border: #1f2937;
+    --background: #0a0d12;
+    --foreground: #e7eaf0;
+    --surface: #12161f;
+    --surface-muted: #1a202c;
+    --border: #232a37;
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    --shadow-card-hover: 0 2px 8px rgba(0, 0, 0, 0.4), 0 20px 40px -16px rgba(211, 47, 47, 0.18);
+    --gradient-accent: linear-gradient(135deg, var(--color-dnl-red) 0%, var(--color-dnl-accent-warm) 100%);
   }
 }
 
@@ -46,6 +59,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  background-image: radial-gradient(ellipse 1200px 600px at 15% -10%, rgba(211, 47, 47, 0.06), transparent);
+  background-attachment: fixed;
 }
 
 ::selection {
@@ -59,4 +74,14 @@ body {
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background: var(--color-dnl-slate-500);
   border-radius: 999px;
+}
+
+/* Tarjetas clicables (envueltas en Link) — usar junto con Card para dar
+   feedback de hover mas notorio que un simple cambio de borde. */
+.card-interactive {
+  transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
+}
+.card-interactive:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
 }
