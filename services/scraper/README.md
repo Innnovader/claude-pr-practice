@@ -33,6 +33,9 @@ httpx+BeautifulSoup. X/Twitter sigue como `STUB` a la espera de:
 Lo que sí funciona hoy sin credenciales:
 
 - `app/sources/news.py` — scraping real de 3 feeds RSS en vivo.
+- `app/sources/gdelt.py` — cobertura ampliada vía GDELT Project (ver
+  "Próximos pasos" abajo para el estado y la limitación de rate limit
+  conocida).
 - `app/dedup.py` — deduplicación por hash y por similitud vectorial (con tests).
 - El esquema de modelos (`app/models.py`) que espeja `supabase/migrations/0001_init_schema.sql`.
 - El scheduler y los endpoints de health/trigger manual.
@@ -102,14 +105,24 @@ pytest -q
    Contraloría — ambas requieren Playwright porque sus sitios renderizan el
    listado por JS (SharePoint/SPA respectivamente).
 3. **Centros de pensamiento** (`app/sources/think_tanks.py`): ✅ Fedesarrollo
-   y Dejusticia (RSS) e IPL y ANIF (scraping HTML real) funcionando. Falta
-   solo Banco de la República — su listado de publicaciones no trae los
-   títulos en el HTML inicial (probablemente los carga por JS), necesita
-   investigación adicional o Playwright.
-4. **X/Twitter** (`app/sources/x_twitter.py`): poblar `MONITORED_ACCOUNTS`
+   y Dejusticia (RSS), IPL y ANIF (scraping HTML real) y Banco de la
+   República (scraping HTML real, con manejo del WAF anti-bot que a veces
+   bloquea la petición — ver docstring de `_scrape_banrep`) — las 5 fuentes
+   funcionando.
+4. **GDELT** (`app/sources/gdelt.py`): ✅ implementado y con tests (fixtures
+   mockeados, no depende de red). La consulta a la DOC API funcionó en vivo
+   una vez desde este entorno (JSON válido con artículos reales), pero quedó
+   con 429 persistente en corridas posteriores incluso respetando el rate
+   limit publicado (una consulta cada 5s) — probablemente por IP compartida
+   del entorno de desarrollo, no por abuso. `scrape_gdelt_news()` no rompe el
+   ciclo de noticias si esto pasa (retorna `[]`). Corre automáticamente cada
+   15 min vía GitHub Actions (IP distinta en cada ejecución) — revisar
+   `scrape_runs` tras las primeras corridas en CI para confirmar que sí trae
+   resultados en ese entorno.
+5. **X/Twitter** (`app/sources/x_twitter.py`): poblar `MONITORED_ACCOUNTS`
    con los @handles reales a monitorear y completar la llamada a la API v2
    de X (o Tavily como fallback).
-5. **Clasificación IA** (`app/ai.py`): requiere `ANTHROPIC_API_KEY`. La
+6. **Clasificación IA** (`app/ai.py`): requiere `ANTHROPIC_API_KEY`. La
    función `embed_text` requiere además un proveedor de embeddings (p.ej.
    Voyage AI) para el buscador semántico del Módulo 5 — la API de Anthropic
    no expone embeddings de propósito general.
