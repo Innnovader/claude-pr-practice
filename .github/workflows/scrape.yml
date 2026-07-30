@@ -22,6 +22,10 @@ jobs:
         working-directory: services/scraper
         run: pip install -r requirements.txt
 
+      - name: Correr tests (dedup, filtro de relevancia)
+        working-directory: services/scraper
+        run: python -m pytest tests/ -q
+
       - name: Correr ciclo de noticias + centros de pensamiento
         working-directory: services/scraper
         env:
