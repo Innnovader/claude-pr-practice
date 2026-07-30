@@ -14,24 +14,23 @@ export function StatTile({
 }) {
   return (
     <div
-      className="rounded-xl border p-4 flex items-center gap-3"
-      style={{ borderColor: "var(--border)", background: "var(--surface)" }}
+      className="rounded-2xl border p-4 flex items-center gap-3.5"
+      style={{ borderColor: "var(--border)", background: "var(--surface)", boxShadow: "var(--shadow-card)" }}
     >
       {Icon && (
         <div
           className={cn(
-            "flex h-9 w-9 items-center justify-center rounded-lg shrink-0",
-            accent === "red"
-              ? "bg-[var(--color-dnl-red)]/10 text-[var(--color-dnl-red)]"
-              : "bg-slate-500/10 text-slate-500"
+            "flex h-10 w-10 items-center justify-center rounded-xl shrink-0 text-white",
+            accent === "red" ? "shadow-[0_4px_12px_-2px_rgba(211,47,47,0.4)]" : "bg-slate-500/15 text-slate-500 shadow-none"
           )}
+          style={accent === "red" ? { backgroundImage: "var(--gradient-accent)" } : undefined}
         >
           <Icon size={18} />
         </div>
       )}
       <div>
         <p className="text-xs text-slate-500">{label}</p>
-        <p className="text-xl font-semibold tabular-nums">{value}</p>
+        <p className="text-2xl font-bold tracking-tight tabular-nums">{value}</p>
       </div>
     </div>
   );
