@@ -15,8 +15,8 @@ export async function Header({ title, subtitle }: { title: string; subtitle?: st
       <div className="flex items-center gap-2 min-w-0">
         <MobileMenuButton />
         <div className="min-w-0">
-          <h1 className="text-lg font-semibold truncate">{title}</h1>
-          {subtitle && <p className="text-xs text-slate-500 truncate">{subtitle}</p>}
+          <h1 className="text-base sm:text-lg font-semibold leading-tight">{title}</h1>
+          {subtitle && <p className="hidden text-xs text-slate-500 sm:block">{subtitle}</p>}
         </div>
       </div>
       <div className="flex items-center gap-3">

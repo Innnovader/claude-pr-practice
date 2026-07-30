@@ -16,7 +16,7 @@ export function UserMenu({ profile }: { profile: CurrentProfile | null }) {
     return (
       <Link
         href="/login"
-        className="flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-[var(--color-dnl-red)] hover:text-[var(--color-dnl-red)] dark:text-slate-300"
+        className="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:border-[var(--color-dnl-red)] hover:text-[var(--color-dnl-red)] dark:text-slate-300 sm:px-3"
         style={{ borderColor: "var(--border)" }}
       >
         <UserRound size={13} />
