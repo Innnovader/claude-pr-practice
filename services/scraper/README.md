@@ -39,6 +39,8 @@ Lo que sí funciona hoy sin credenciales:
 | Semana - Política | `semana.com/arc/outboundfeeds/rss/category/politica/` | RSS ✓ (verificado 2026-07-30) — no existía o daba 404 el 2026-07-28 |
 | Blu Radio - Noticias del Día | feed Omny.fm del show (ver `app/sources/news.py`) | RSS ✓ (verificado 2026-07-30) — su sitio no tiene RSS de texto, pero el reproductor de audio sí usa RSS estándar por episodio |
 | Noticias Caracol (YouTube) | `youtube.com/feeds/videos.xml?channel_id=UC2Xq2PK-got3Rtz9ZJ32hLQ` | RSS ✓ (verificado 2026-07-30) — feed oficial de YouTube por canal, sin API key. Mismo patrón sirve para cualquier otro canal (RCN, W Radio, etc.) si se necesita más adelante |
+| Portafolio - Economía | `portafolio.co/rss/economia.xml` | RSS ✓ (verificado 2026-07-30) — su URL "obvia" `/rss` en realidad sirve una página HTML índice de feeds por sección, no el feed en sí |
+| La República - Economía | `larepublica.co/rss/economia` | RSS ✓ (verificado 2026-07-30) — usar la ruta scoped a economía, no `/rss` (el feed general mete también sección "Ocio") |
 | Fedesarrollo | `repository.fedesarrollo.org.co/feed/rss_1.0/site` | RSS 1.0 del repositorio institucional, no `/feed` |
 | Dejusticia | `dejusticia.org/feed/` | RSS ✓ |
 | Procuraduría | `apps.procuraduria.gov.co/portal/COMUNICADO-A-LA-PRENSA.news` | HTML — no `procuraduria.gov.co/Pages/comunicados.aspx` (404) |

@@ -49,6 +49,15 @@ NEWS_RSS_SOURCES: dict[str, str] = {
     # headline y la descripción cae en `summary`. Canal verificado como el
     # oficial de Noticias Caracol (feed.title == "Noticias Caracol").
     "Noticias Caracol (YouTube)": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2Xq2PK-got3Rtz9ZJ32hLQ",
+    # Verificados el 2026-07-30 a pedido explícito de la usuaria (medios
+    # económicos). Portafolio: su URL "obvia" (/rss) en realidad sirve una
+    # página HTML índice de feeds por sección, no XML — el feed real está en
+    # /rss/economia.xml (se extrajo de los <a href> de esa página índice).
+    # La República: sí tiene <link rel="alternate"> pero solo en subrutas,
+    # no en el homepage — se usa /rss/economia (scoped) en vez de /rss (el
+    # feed general trae también sección "Ocio", fuera del alcance del panel).
+    "Portafolio - Economía": "https://www.portafolio.co/rss/economia.xml",
+    "La República - Economía": "https://www.larepublica.co/rss/economia",
 }
 
 # Fuentes evaluadas y descartadas — no usar sin volver a verificar primero:
