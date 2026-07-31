@@ -7,7 +7,9 @@ Estado verificado el 2026-07-30 (a pedido explícito de la usuaria — este
 módulo llevaba desde el scaffold inicial como stub que siempre devolvía []):
   - Fiscalía, Defensoría: HTML server-rendered con listados fechados reales
     (confirmado con fechas del mismo día) — scraping real con BeautifulSoup
-    implementado abajo.
+    implementado abajo. Defensoría corre bien en producción; Fiscalía tiene
+    una limitación de red conocida desde GitHub Actions específicamente —
+    ver docstring de `_scrape_fiscalia` abajo.
   - Procuraduría: la URL histórica (apps.procuraduria.gov.co/portal/
     COMUNICADO-A-LA-PRENSA.news) sigue respondiendo 200 pero quedó congelada
     en octubre de 2022 — es una página abandonada de su CMS anterior. Su Sala
@@ -141,11 +143,20 @@ async def _scrape_fiscalia(source: ControlEntitySource) -> list[ScrapedControlAl
     con título/link en `h2.noticia-card-title > a`, fecha en `.noticia-card-date`
     (formato largo en español) y resumen en `.noticia-card-excerpt`.
 
-    Timeout ampliado a 30s (default de fetch_html es 15s): en la corrida real
-    del 2026-07-31 en GitHub Actions esta fuente falló las 3 reintentos con
-    `httpcore.ConnectTimeout` mientras Defensoría (mismo ciclo) respondió sin
-    problema — fiscalia.gov.co es notablemente más lento/inestable que el
-    resto de fuentes .gov.co ya documentadas en este proyecto."""
+    LIMITACIÓN CONOCIDA (actualizado 2026-07-31): esta fuente funciona bien
+    probada manualmente (confirmó datos reales al construir el scraper), pero
+    falla de forma consistente y reproducible desde GitHub Actions —
+    `httpcore.ConnectTimeout` en las 3 corridas de CI revisadas en el lapso de
+    ~1.5h después de subir el fix, incluso ampliando el timeout de 15s a 30s
+    (descartado: no era un problema de lentitud/timeout corto, el timeout más
+    largo no cambió nada). Todo apunta a que fiscalia.gov.co bloquea o
+    descarta silenciosamente conexiones desde los rangos de IP de GitHub
+    Actions — mismo patrón defensivo que el WAF ya documentado de Banco de la
+    República (ver think_tanks.py), solo que sin página de challenge visible.
+    No se investiga más a fondo ni se intenta evadir el bloqueo (headers/
+    proxies/rotación de IP) — eso cruzaría a evasión de detección de bots,
+    fuera de alcance de este proyecto. Se deja el timeout en 30s (no hace
+    daño) pero no se debe asumir que subirlo más va a arreglar esto."""
     html = await fetch_html(source.press_room_url, timeout=30.0)
     soup = BeautifulSoup(html, "html.parser")
 

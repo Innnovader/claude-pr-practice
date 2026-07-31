@@ -16,12 +16,19 @@ con BeautifulSoup (no tienen RSS) — 24 publicaciones reales obtenidas en la
 República (dentro de centros de pensamiento) también quedó resuelto con
 BeautifulSoup — ver docstring de `_scrape_banrep`.
 
-**Entes de control: 2 de 4 fuentes reales desde el 2026-07-30.** Fiscalía y
-Defensoría corren en HTML server-rendered con listados fechados en vivo —
-scraping real con BeautifulSoup (`_scrape_fiscalia`, `_scrape_defensoria`),
-con tests contra fixtures fijos en `tests/test_control_entities.py`.
-Procuraduría y Contraloría siguen como `STUB`: sus secciones de sala de
-prensa renderizan el listado 100% por JS (SharePoint moderno / SPA), no basta
+**Entes de control: código real para 2 de 4, pero solo Defensoría corre en
+producción.** Fiscalía y Defensoría corren en HTML server-rendered con
+listados fechados en vivo — scraping real con BeautifulSoup
+(`_scrape_fiscalia`, `_scrape_defensoria`), con tests contra fixtures fijos
+en `tests/test_control_entities.py`. Defensoría sí aporta datos reales en
+cada corrida de GitHub Actions. Fiscalía funciona perfecto probada
+manualmente, pero falla consistentemente (`httpcore.ConnectTimeout`) desde
+GitHub Actions específicamente — todo apunta a que el sitio bloquea/descarta
+conexiones desde esos rangos de IP (mismo patrón que el WAF de Banco de la
+República, sin página de challenge visible). No se investigó evadir el
+bloqueo — ver docstring de `_scrape_fiscalia`. Procuraduría y Contraloría
+siguen como `STUB`: sus secciones de sala de prensa renderizan el listado
+100% por JS (SharePoint moderno / SPA), no basta
 httpx+BeautifulSoup. X/Twitter sigue como `STUB` a la espera de:
 
 - Credenciales reales (`SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`,
