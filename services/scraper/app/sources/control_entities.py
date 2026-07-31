@@ -139,8 +139,14 @@ def _entry_to_alert(source_name: str, title: str, url: str, published_at: dateti
 async def _scrape_fiscalia(source: ControlEntitySource) -> list[ScrapedControlAlert]:
     """Fiscalía corre en WordPress — cada comunicado es un `article.noticia-card`
     con título/link en `h2.noticia-card-title > a`, fecha en `.noticia-card-date`
-    (formato largo en español) y resumen en `.noticia-card-excerpt`."""
-    html = await fetch_html(source.press_room_url)
+    (formato largo en español) y resumen en `.noticia-card-excerpt`.
+
+    Timeout ampliado a 30s (default de fetch_html es 15s): en la corrida real
+    del 2026-07-31 en GitHub Actions esta fuente falló las 3 reintentos con
+    `httpcore.ConnectTimeout` mientras Defensoría (mismo ciclo) respondió sin
+    problema — fiscalia.gov.co es notablemente más lento/inestable que el
+    resto de fuentes .gov.co ya documentadas en este proyecto."""
+    html = await fetch_html(source.press_room_url, timeout=30.0)
     soup = BeautifulSoup(html, "html.parser")
 
     results: list[ScrapedControlAlert] = []
