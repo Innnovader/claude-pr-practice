@@ -21,8 +21,8 @@ export function TopicsChart({
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical" margin={{ top: 4, right: 16, left: 8, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
-            <XAxis type="number" tick={{ fontSize: 11 }} stroke="var(--border)" />
-            <YAxis type="category" dataKey="topic" width={130} tick={{ fontSize: 11 }} stroke="var(--border)" />
+            <XAxis type="number" tick={{ fontSize: 11, fill: "var(--foreground)" }} stroke="var(--border)" />
+            <YAxis type="category" dataKey="topic" width={130} tick={{ fontSize: 11, fill: "var(--foreground)" }} stroke="var(--border)" />
             <Tooltip
               contentStyle={{
                 background: "var(--surface)",
