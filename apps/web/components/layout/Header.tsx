@@ -9,19 +9,24 @@ export async function Header({ title, subtitle }: { title: string; subtitle?: st
 
   return (
     <header
-      className="flex items-center justify-between gap-2 border-b px-3 py-3 md:px-6"
-      style={{ borderColor: "var(--border)", background: "var(--surface)" }}
+      className="glass-card flex items-center justify-between gap-2 border-b px-3 py-3 md:px-6 sticky top-0 z-10"
+      style={{ borderColor: "var(--border)" }}
     >
       <div className="flex items-center gap-2 min-w-0">
         <MobileMenuButton />
         <div className="min-w-0">
-          <h1 className="text-base sm:text-lg font-semibold leading-tight">{title}</h1>
+          <h1
+            className="text-base sm:text-lg font-semibold leading-tight bg-clip-text text-transparent"
+            style={{ backgroundImage: "var(--gradient-accent)" }}
+          >
+            {title}
+          </h1>
           {subtitle && <p className="hidden text-xs text-slate-500 sm:block">{subtitle}</p>}
         </div>
       </div>
       <div className="flex items-center gap-3">
         <span className="hidden sm:flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
-          <Circle size={8} className="fill-current" />
+          <Circle size={8} className="fill-current animate-pulse" />
           Monitoreo activo
         </span>
         <ThemeToggle />

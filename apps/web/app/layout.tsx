@@ -23,6 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
+        <div className="aurora-bg" aria-hidden="true">
+          <div className="aurora-blob-3" />
+        </div>
         <MobileNavProvider>
           <div className="flex h-screen overflow-hidden">
             <Sidebar />

@@ -36,10 +36,10 @@ export default async function CoyunturaPage() {
         )}
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <StatTile label="Noticias hoy" value={news.length} icon={Newspaper} accent="red" />
-          <StatTile label="Publicaciones en X" value={mockTweets.length} icon={AtSign} accent="red" />
-          <StatTile label="Alertas entes de control" value={hasRealNews ? realAlerts.length : mockControlAlerts.length} icon={ShieldAlert} />
-          <StatTile label="Relevancia alta hoy" value={hasRealNews ? `${highRelevance} (sin clasificar)` : highRelevance} icon={TrendingUp} />
+          <StatTile label="Noticias hoy" value={news.length} icon={Newspaper} accent="red" delayMs={0} />
+          <StatTile label="Publicaciones en X" value={mockTweets.length} icon={AtSign} accent="red" delayMs={80} />
+          <StatTile label="Alertas entes de control" value={hasRealNews ? realAlerts.length : mockControlAlerts.length} icon={ShieldAlert} delayMs={160} />
+          <StatTile label="Relevancia alta hoy" value={hasRealNews ? `${highRelevance} (sin clasificar)` : highRelevance} icon={TrendingUp} delayMs={240} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

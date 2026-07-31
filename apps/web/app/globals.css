@@ -59,8 +59,6 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  background-image: radial-gradient(ellipse 1200px 600px at 15% -10%, rgba(211, 47, 47, 0.06), transparent);
-  background-attachment: fixed;
 }
 
 ::selection {
@@ -79,9 +77,147 @@ body {
 /* Tarjetas clicables (envueltas en Link) — usar junto con Card para dar
    feedback de hover mas notorio que un simple cambio de borde. */
 .card-interactive {
-  transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
+  transition: box-shadow 220ms ease, transform 220ms ease, border-color 220ms ease, background-color 220ms ease;
 }
 .card-interactive:hover {
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover), 0 0 0 1px rgba(242, 84, 45, 0.25);
+  transform: translateY(-3px) scale(1.008);
+}
+
+/* ---------------------------------------------------------------------
+   Rediseño "radical" v3 — pedido explícito de la usuaria ("no se nota nada
+   la diferencia, quiero algo chevere de fondo, animaciones, de verdad").
+   Fondo aurora animado + tarjetas de vidrio (glassmorphism) + micro-
+   animaciones de entrada. Todo vive detrás de un flag reversible: este
+   commit es el único que lo introduce en la rama de diseño, aislada de
+   producción (main) hasta que la usuaria lo apruebe.
+   ------------------------------------------------------------------- */
+
+/* Fondo aurora: 3 manchas de color grandes, desenfocadas, que se mueven muy
+   lento en bucle — fixed detrás de todo el contenido (z-index: -1), así que
+   nunca interfiere con la lectura, solo le da vida al fondo oscuro. */
+.aurora-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora-bg::before,
+.aurora-bg::after,
+.aurora-bg .aurora-blob-3 {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+}
+.aurora-bg::before {
+  width: 55vw;
+  height: 55vw;
+  max-width: 700px;
+  max-height: 700px;
+  top: -15%;
+  left: -10%;
+  background: radial-gradient(circle, var(--color-dnl-red) 0%, transparent 70%);
+  animation: aurora-drift-1 22s ease-in-out infinite alternate;
+}
+.aurora-bg::after {
+  width: 45vw;
+  height: 45vw;
+  max-width: 600px;
+  max-height: 600px;
+  bottom: -20%;
+  right: -10%;
+  background: radial-gradient(circle, var(--color-dnl-accent-warm) 0%, transparent 70%);
+  animation: aurora-drift-2 26s ease-in-out infinite alternate;
+}
+.aurora-bg .aurora-blob-3 {
+  width: 38vw;
+  height: 38vw;
+  max-width: 520px;
+  max-height: 520px;
+  top: 35%;
+  left: 45%;
+  background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
+  animation: aurora-drift-3 30s ease-in-out infinite alternate;
+  opacity: 0.28;
+}
+:root:not([data-theme="dark"]) .aurora-bg::before,
+:root:not([data-theme="dark"]) .aurora-bg::after,
+:root:not([data-theme="dark"]) .aurora-bg .aurora-blob-3 {
+  opacity: 0.22;
+}
+
+@keyframes aurora-drift-1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(8vw, 10vh) scale(1.15); }
+}
+@keyframes aurora-drift-2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-10vw, -6vh) scale(1.1); }
+}
+@keyframes aurora-drift-3 {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) translate(6vw, -8vh) scale(1.2); }
+}
+
+/* Tarjetas de vidrio — fondo translúcido + blur, para que el aurora se
+   asome detrás. Se activa con la clase .glass-card (Card.tsx la aplica). */
+.glass-card {
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Entrada animada: tarjetas y filas de lista aparecen con fade + subida
+   suave. Se usa `animation-delay` inline por elemento para escalonarlas. */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Punto pulsante "en vivo". */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.55); }
+  50% { box-shadow: 0 0 0 6px rgba(211, 47, 47, 0); }
+}
+.live-dot {
+  animation: pulse-glow 1.8s ease-out infinite;
+}
+
+/* Brillo en movimiento sobre el degradado institucional (badge "dnl",
+   pastilla activa del menú) — un highlight diagonal que cruza cada pocos
+   segundos, como un "shine" sutil de vidrio. */
+@keyframes shine-sweep {
+  0% { transform: translateX(-120%) skewX(-20deg); }
+  60%, 100% { transform: translateX(220%) skewX(-20deg); }
+}
+.shine-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.shine-sweep::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: shine-sweep 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-bg::before,
+  .aurora-bg::after,
+  .aurora-bg .aurora-blob-3,
+  .live-dot,
+  .shine-sweep::after,
+  .animate-fade-in-up {
+    animation: none !important;
+  }
 }
