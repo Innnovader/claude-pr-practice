@@ -3,8 +3,9 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { getSavedNews } from "@/lib/data/saved-news";
 import { formatRelativeTime } from "@/lib/utils";
-import { FolderOpen, ExternalLink, Bookmark } from "lucide-react";
+import { FolderOpen, ExternalLink, Bookmark, ArrowLeft } from "lucide-react";
 import { MoveFolderSelect } from "@/components/dashboard/MoveFolderSelect";
+import Link from "next/link";
 
 export default async function GuardadosPage() {
   const saved = await getSavedNews();
@@ -24,6 +25,14 @@ export default async function GuardadosPage() {
     <div>
       <Header title="Favoritos" subtitle="Lo que cada quien de la Dirección guarda manualmente — solo visible para tu usuario. Para el archivo automático por tema, ve a Archivo." />
       <div className="p-4 md:p-6 space-y-6">
+        <Link
+          href="/archivo"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-[var(--color-dnl-red)] transition-colors"
+        >
+          <ArrowLeft size={15} />
+          Volver a Archivo
+        </Link>
+
         {saved.length === 0 ? (
           <Card className="p-8 text-center">
             <Bookmark size={24} className="mx-auto mb-2 text-slate-400" />

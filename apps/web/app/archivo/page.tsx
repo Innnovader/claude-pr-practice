@@ -2,7 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Card } from "@/components/ui/Card";
 import { VerifiedDataBanner } from "@/components/ui/VerifiedDataBanner";
 import { getArchivoByTopic, TOPIC_DISPLAY_ORDER } from "@/lib/data/archivo";
-import { Archive, ChevronRight, Landmark, HeartPulse, PiggyBank, Shield, Leaf, Scale, Building2, FolderOpen, Globe2, MessageSquareQuote } from "lucide-react";
+import { Archive, ChevronRight, Landmark, HeartPulse, PiggyBank, Shield, Leaf, Scale, Building2, FolderOpen, Globe2, MessageSquareQuote, Bookmark } from "lucide-react";
 import Link from "next/link";
 
 const TOPIC_ICONS: Record<string, typeof Landmark> = {
@@ -30,8 +30,24 @@ export default async function ArchivoPage() {
 
   return (
     <div>
-      <Header title="Archivo" subtitle="Noticias clasificadas automáticamente por tema — compartido con todo el equipo" />
+      <Header title="Archivo" subtitle="Noticias clasificadas automáticamente por tema, más tus favoritos guardados a mano" />
       <div className="p-4 md:p-6 space-y-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <Link href="/guardados">
+            <Card className="glass-card p-4 h-full flex flex-col items-center text-center gap-2 hover:border-[var(--color-dnl-red)] transition-colors">
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-full text-white"
+                style={{ backgroundImage: "var(--gradient-accent)" }}
+              >
+                <Bookmark size={22} />
+              </div>
+              <p className="text-sm font-semibold">Favoritos</p>
+              <p className="text-xs text-slate-500">Guardados a mano</p>
+              <ChevronRight size={14} className="text-slate-400 mt-auto" />
+            </Card>
+          </Link>
+        </div>
+
         {total === 0 ? (
           <Card className="p-8 text-center">
             <Archive size={24} className="mx-auto mb-2 text-slate-400" />

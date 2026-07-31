@@ -6,13 +6,11 @@ import {
   Users,
   ShieldAlert,
   Map,
-  Search,
   ScrollText,
-  Bookmark,
   Archive,
-  Sparkles,
   X,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -24,19 +22,13 @@ const NAV_ITEMS = [
   { href: "/entes-control", label: "Entes de Control", icon: ShieldAlert },
   { href: "/mapa", label: "Mapa Territorial", icon: Map },
   { href: "/archivo", label: "Archivo", icon: Archive },
-  { href: "/buscador", label: "Buscador RAG", icon: Search },
-  { href: "/guardados", label: "Favoritos", icon: Bookmark },
-  { href: "/chat", label: "Asistente IA", icon: Sparkles },
 ];
 
 function BrandHeader() {
   return (
     <div className="flex items-center gap-2 px-4 py-4 border-b" style={{ borderColor: "var(--border)" }}>
-      <div
-        className="shine-sweep flex h-8 w-8 items-center justify-center rounded-lg text-white font-bold text-sm shadow-[0_4px_12px_-2px_rgba(211,47,47,0.5)]"
-        style={{ backgroundImage: "var(--gradient-accent)" }}
-      >
-        DNL
+      <div className="shine-sweep flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-[0_4px_12px_-2px_rgba(211,47,47,0.5)] overflow-hidden">
+        <Image src="/logos/partido-liberal-mark.png" alt="Partido Liberal Colombiano" width={32} height={32} className="h-full w-full object-cover" unoptimized />
       </div>
       <div className="leading-tight">
         <p className="text-sm font-semibold">Radar Liberal</p>

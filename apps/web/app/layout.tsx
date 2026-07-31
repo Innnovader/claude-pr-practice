@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileNavProvider } from "@/components/layout/MobileNavContext";
+import { FloatingAssistant } from "@/components/assistant/FloatingAssistant";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Sidebar />
             <div className="flex-1 overflow-y-auto">{children}</div>
           </div>
+          <FloatingAssistant />
         </MobileNavProvider>
       </body>
     </html>
