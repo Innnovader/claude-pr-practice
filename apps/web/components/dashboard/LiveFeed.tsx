@@ -18,20 +18,28 @@ export function LiveFeed({
     <Card className="flex flex-col h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="live-dot absolute inline-flex h-full w-full rounded-full bg-[var(--color-dnl-red)]" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-dnl-red)]" />
+          </span>
           <Radio size={15} className="text-[var(--color-dnl-red)]" />
           Live Feed Multifuente
         </CardTitle>
         <Badge variant="dnl">{news.length} activas</Badge>
       </CardHeader>
       <CardContent className="flex-1 overflow-y-auto scrollbar-thin max-h-[560px] space-y-3">
-        {news.map((item) => (
+        {news.map((item, index) => (
           <a
             key={item.id}
             href={item.source_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="card-interactive block rounded-xl border p-3 hover:border-[var(--color-dnl-red)]"
-            style={{ borderColor: "var(--border)", background: "var(--surface)", boxShadow: "var(--shadow-card)" }}
+            className="card-interactive glass-card animate-fade-in-up block rounded-xl border p-3 hover:border-[var(--color-dnl-red)]"
+            style={{
+              borderColor: "var(--border)",
+              boxShadow: "var(--shadow-card)",
+              animationDelay: `${Math.min(index, 12) * 45}ms`,
+            }}
           >
             <div className="flex items-start justify-between gap-2">
               <p className="text-sm font-medium leading-snug">{item.headline}</p>

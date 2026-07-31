@@ -5,7 +5,7 @@ export function Card({ className, style, ...props }: HTMLAttributes<HTMLDivEleme
   return (
     <div
       className={cn(
-        "rounded-2xl border bg-[var(--surface)] transition-shadow duration-200",
+        "glass-card rounded-2xl border transition-shadow duration-200",
         className
       )}
       style={{ borderColor: "var(--border)", boxShadow: "var(--shadow-card)", ...style }}
