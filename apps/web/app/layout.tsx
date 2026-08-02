@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileNavProvider } from "@/components/layout/MobileNavContext";
 import { FloatingAssistant } from "@/components/assistant/FloatingAssistant";
@@ -7,6 +7,23 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Radar Liberal DNL",
   description: "Plataforma de inteligencia política — Dirección Nacional Liberal (2026-2030)",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Radar Liberal",
+  },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/icons/apple-touch-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#d32f2f",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
