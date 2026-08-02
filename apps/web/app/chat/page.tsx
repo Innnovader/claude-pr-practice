@@ -2,8 +2,9 @@ import { Header } from "@/components/layout/Header";
 import { Card } from "@/components/ui/Card";
 import { isAnthropicConfigured } from "@/lib/is-anthropic-configured";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
-import { AlertTriangle, Sparkles } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Sparkles } from "lucide-react";
 import { ChatWidget } from "@/components/chat/ChatWidget";
+import Link from "next/link";
 
 export default function ChatPage() {
   const ready = isAnthropicConfigured() && isSupabaseConfigured();
@@ -11,7 +12,15 @@ export default function ChatPage() {
   return (
     <div className="flex h-screen flex-col">
       <Header title="Asistente Radar Liberal" subtitle="Chat con IA sobre tus datos reales — noticias, congresistas y alertas" />
-      <div className="flex-1 overflow-hidden p-4 md:p-6">
+      <div className="flex-1 overflow-hidden p-4 md:p-6 flex flex-col">
+        <Link
+          href="/"
+          className="mb-3 inline-flex shrink-0 items-center gap-1.5 text-sm text-slate-500 hover:text-[var(--color-dnl-red)] transition-colors"
+        >
+          <ArrowLeft size={15} />
+          Volver a Coyuntura Nacional
+        </Link>
+        <div className="flex-1 overflow-hidden">
         {ready ? (
           <ChatWidget />
         ) : (
@@ -29,6 +38,7 @@ export default function ChatPage() {
             </div>
           </Card>
         )}
+        </div>
       </div>
       {ready && (
         <div className="border-t px-4 py-2 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1" style={{ borderColor: "var(--border)" }}>

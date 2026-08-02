@@ -7,8 +7,9 @@ import { Tabs } from "@/components/ui/Tabs";
 import { mockParliamentarians, mockBills, mockStatements } from "@/lib/mock-data";
 import { getRealParliamentarianById } from "@/lib/data/parliamentarians";
 import { formatDate, formatRelativeTime } from "@/lib/utils";
-import { UserRound, Mail, AtSign, Instagram, ExternalLink } from "lucide-react";
+import { UserRound, Mail, AtSign, Instagram, ExternalLink, ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 function handleFromUrl(url: string): string {
   const last = url.replace(/\/$/, "").split("/").pop() ?? url;
@@ -36,6 +37,14 @@ export default async function ParliamentarianProfilePage({ params }: { params: P
     <div>
       <Header title={parliamentarian.full_name} subtitle={parliamentarian.chamber === "senado" ? "Senado de la República" : `Cámara de Representantes — ${parliamentarian.department}`} />
       <div className="p-4 md:p-6 space-y-4">
+        <Link
+          href="/parlamentarios"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-[var(--color-dnl-red)] transition-colors"
+        >
+          <ArrowLeft size={15} />
+          Volver a la Bancada Liberal
+        </Link>
+
         {isReal ? (
           <VerifiedDataBanner>
             Nombre y circunscripción verificados. Los campos de abajo (proyectos de ley, declaraciones,
